@@ -118,8 +118,8 @@ a_expr : a_expr T_ADD a_term
         }
         if ($1->datatype == DTYPE_FLOAT)
         {
-          // TASK: Modify this semantic action to support both DTYPE_INT and DTYPE_FLOAT.
-          // For DTYPE_FLOAT you should generate an OP_FADD instruction.
+	  res = make_temp (symtab, $1->datatype);
+          itab_instruction_add(itab, OP_FADD, res->addr, $1->addr, $3->addr);
         }
         $$ = res;
         #ifdef _SMP_DEBUG_
@@ -140,6 +140,12 @@ a_expr : a_expr T_ADD a_term
           res = make_temp (symtab, $1->datatype);
           itab_instruction_add (itab, OP_SUB, res->addr, $1->addr, $3->addr);
         }
+	if ($1->datatype == DTYPE_FLOAT)
+        {
+          res = make_temp (symtab, $1->datatype);
+          itab_instruction_add (itab, OP_FSUB, res->addr, $1->addr, $3->addr);
+        }
+	  // For DTYPE_FLOAT you should generate an OP_FADD instruction.
         $$ = res;
         #ifdef _SMP_DEBUG_
         cout << "On a_expr (2)\n";

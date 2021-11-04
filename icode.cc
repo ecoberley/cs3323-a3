@@ -130,7 +130,12 @@ int run (itab_t * itab, char * stack, char * static_mem)
           int * dst = (int*)(stack + op->addr1);
           *dst = *src;
         }
-        // TASK: Complete case for DTYPE_FLOAT
+	if (op->addr2 == DTYPE_FLOAT)
+        {
+          float * src = (float*)(stack + op->addr3);
+          float * dst = (float*)(stack + op->addr1);
+          *dst = *src;
+        }
         break;
       case OP_LOADCST:
         if (op->addr2 == DTYPE_INT)
@@ -139,7 +144,12 @@ int run (itab_t * itab, char * stack, char * static_mem)
           int * dst = (int*)(stack + op->addr1);
           *dst = *src;
         }
-        // TASK: Complete case for DTYPE_FLOAT
+        if (op->addr2 == DTYPE_FLOAT)
+        {
+          float * src = (float*)(static_mem + op->addr3);
+          float * dst = (float*)(stack + op->addr1);
+          *dst = *src;
+        }
         break;
       case OP_STORE:
         if (op->addr2 == DTYPE_INT)
@@ -148,7 +158,12 @@ int run (itab_t * itab, char * stack, char * static_mem)
           int * dst = (int*)(stack + op->addr1);
           *dst = *src;
         }
-        // TASK: Complete case for DTYPE_FLOAT
+	if (op->addr2 == DTYPE_FLOAT)
+        {
+          float * src = (float*)(stack + op->addr3);
+          float * dst = (float*)(stack + op->addr1);
+          *dst = *src;
+        }
         break;
       case OP_ADD:
         {
@@ -190,19 +205,45 @@ int run (itab_t * itab, char * stack, char * static_mem)
           int * dst = (int*)(stack + op->addr1);
           *dst = - *src;
         }
-        // TASK: Complete case for DTYPE_FLOAT
+	if (op->addr2 == DTYPE_FLOAT)
+        {
+                float * src = (float*)(stack + op->addr3);
+                float * dst = (float*)(stack + op->addr1);
+                *dst = - *src;
+        }
         break;
       case OP_FADD:
-        // TASK: implement this operation. See respective integer operation defined above.
+        {
+            float * left = (float*)(stack + op->addr2);
+            float * right = (float*)(stack + op->addr3);
+            float * res = (float*)(stack + op->addr1);
+            *res = *left + *right;
+        }
         break;
       case OP_FSUB:
-        // TASK: implement this operation. See respective integer operation defined above.
+        {
+            float * left = (float*)(stack + op->addr2);
+            float * right = (float*)(stack + op->addr3);
+            float * res = (float*)(stack + op->addr1);
+            *res = *left - *right;
+        }
         break;
       case OP_FMUL:
-        // TASK: implement this operation. See respective integer operation defined above.
+        {
+            float * left = (float*)(stack + op->addr2);
+            float * right = (float*)(stack + op->addr3);
+            float * res = (float*)(stack + op->addr1);
+            *res = *left * *right;
+        }
         break;
       case OP_FDIV:
-        // TASK: implement this operation. See respective integer operation defined above.
+        {
+            float * left = (float*)(stack + op->addr2);
+            float * right = (float*)(stack + op->addr3);
+            float * res = (float*)(stack + op->addr1);
+            assert (*right && "Intended division by zero. Aborting");
+            *res = *left / *right;
+        }
         break;
       case OP_WRITE:
         if (op->addr2 == DTYPE_INT)
